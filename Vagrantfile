@@ -66,20 +66,31 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
   apt-get update
+  apt update
+  apt upgrade
   apt-get -y install \
     ca-certificates \
     curl \
     gnupg \
-    lsb-release
+    lsb-release \
+    make
   
+  # Install Docker
   curl -fsSL https://get.docker.com -o get-docker.sh
   sudo sh get-docker.sh
 
   apt-get install -y uidmap
   dockerd-rootless-setuptool.sh install
-
-  apt-get install 
+  # Install nginx
   sudo apt-get install nginx
+
+  # Install NVM & Nodejs
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+  source ~/.bashrc
+  nvm install v18.14.2
+  nvm install-latest-npm
+  npm install -g yarn
+  
   #   apt-get install -y apache2
   SHELL
 end
